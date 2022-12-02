@@ -1,0 +1,93 @@
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+void pop(),push(char),display();
+char stack[100]=&quot;\0&quot;;
+char inputbuffer[100];
+int top=-1;
+char *ip;
+void main()
+{
+printf(&quot;E-&gt;E+E\n&quot;);
+printf(&quot;E_&gt;E*E\n&quot;);
+printf(&quot;E-&gt;(E)\n&quot;);
+printf(&quot;E-&gt;d\n&quot;);
+printf(&quot;Enter the input string followed by $\n&quot;);
+
+scanf(&quot;%s&quot;,inputbuffer);
+ip=inputbuffer;
+push(&#39;$&#39;);
+printf(&quot;STACK\tBUFFER\tACTION\n&quot;);
+printf(&quot;----\t----\t----\n&quot;);
+display();
+do
+{
+if((stack[top]==&#39;E&#39;&amp;&amp;stack[top-1]==&#39;$&#39;)&amp;&amp;(*(ip)==&#39;$&#39;))
+break;
+if(stack[top]==&#39;$&#39;)
+{
+push(*ip);
+ip++;
+printf(&quot;shift&quot;);
+}
+else if(stack[top]==&#39;d&#39;)
+{
+display();
+pop();
+push(&#39;E&#39;);
+printf(&quot;Reduce E-&gt;d\n&quot;);
+}
+else if(stack[top]==&#39;E&#39;&amp;&amp;stack[top-1]==&#39;+&#39;&amp;&amp;stack[top-2]==&#39;E&#39;&amp;&amp;ip!=&#39; &#39;)
+{
+display();
+pop();
+pop();
+pop();
+push(&#39;E&#39;);
+
+printf(&quot;Reduce E-&gt;E+E&quot;);
+}
+else if(stack[top]==&#39;E&#39;&amp;&amp;stack[top-1]==&#39;*&#39;&amp;&amp;stack[top-2]==&#39;E&#39;)
+{
+display();
+pop();
+pop();
+pop();
+push(&#39;E&#39;);
+printf(&quot;Reduce E-&gt;E*E&quot;);
+}
+else if(stack[top]==&#39;)&#39;&amp;&amp;stack[top-1]==&#39;E&#39;&amp;&amp;stack[top-2]==&#39;(&#39;)
+{
+display();
+pop();
+pop();
+pop();
+push(&#39;E&#39;);
+printf(&quot;Reduce E-&gt;(E)&quot;);
+}
+else
+{
+display();
+push(*ip);
+ip++;
+printf(&quot;shift&quot;);
+}
+}
+while(1);
+display();
+
+printf(&quot;Accept\n\n\n&quot;);
+}
+void push(char c)
+{
+top++;
+stack[top]=c;
+}
+void pop()
+{
+stack[top]=&#39;\0&#39;;
+top--;
+}
+void display()
+{
+printf(&quot;\n%s\t%s\t&quot;,stack,ip);
+}
