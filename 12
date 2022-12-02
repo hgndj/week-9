@@ -1,0 +1,92 @@
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+void pop(),push(char),display();
+char stack[100]=&quot;\0&quot;, input[100], *ip;
+int top=-1;
+void push(char c)
+{
+top++;
+stack[top]=c;
+}
+
+void pop()
+{
+stack[top]=&#39;\0&#39;;
+top--;
+}
+void display()
+
+{
+printf(&quot;\n%s\t%s\t&quot;,stack,ip);
+}
+void main()
+{
+printf(&quot;S-&gt;0S0\n&quot;);
+printf(&quot;S-&gt;1S1\n&quot;);
+printf(&quot;S-&gt;2\n&quot;);
+printf(&quot;Enter the input string followed by $ \n&quot;);
+scanf(&quot;%s&quot;,input);
+ip=input;
+push(&#39;$&#39;);
+printf(&quot;STACK\t BUFFER \t ACTION\n&quot;);
+printf(&quot;-----\t ------- \t------ \n&quot;);
+display();
+if(stack[top]==&#39;$&#39; &amp;&amp; *ip==&#39;$&#39;){
+printf(&quot;Null Input&quot;);
+exit(0);
+}
+do
+{
+if((stack[top]==&#39;S&#39; &amp;&amp; stack[top-1]==&#39;$&#39;) &amp;&amp; (*(ip)==&#39;$&#39;))
+{
+display();
+
+printf(&quot; Valid\n\n\n&quot;);
+break;
+}
+if(stack[top]==&#39;$&#39;)
+{
+push(*ip);
+ip++;
+printf(&quot;Shift&quot;);
+}
+else if(stack[top]==&#39;2&#39;)
+{
+display();
+pop();
+push(&#39;S&#39;);
+printf(&quot;Reduce S-&gt;2&quot;);
+}
+else if(stack[top]==&#39;0&#39; &amp;&amp; stack[top-1]==&#39;S&#39; &amp;&amp; stack[top-2]==&#39;0&#39;)
+{
+display();
+pop();
+pop();
+pop();
+push(&#39;S&#39;);
+printf(&quot;Reduce S-&gt;0S0&quot;);
+}
+else if(stack[top]==&#39;1&#39; &amp;&amp; stack[top-1]==&#39;S&#39; &amp;&amp; stack[top-2]==&#39;1&#39;)
+{
+display();
+pop();
+pop();
+pop();
+
+push(&#39;S&#39;);
+printf(&quot;Reduce S-&gt;1S1&quot;);
+}
+
+else if(*ip==&#39;$&#39;)
+{ printf(&quot; Invalid\n\n\n&quot;);
+break;
+}
+else
+{
+display();
+push(*ip);
+ip++;
+printf(&quot;shift&quot;);
+}
+}while(1);
+}
